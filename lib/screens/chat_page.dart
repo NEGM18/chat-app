@@ -53,29 +53,7 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  Future<void> pickAndUploadImage() async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile != null) {
-        final File file = File(pickedFile.path);
-        final String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-        final Reference storageRef =
-            FirebaseStorage.instance.ref().child('chat_images/$fileName');
-
-        final UploadTask uploadTask = storageRef.putFile(file);
-        final TaskSnapshot snapshot = await uploadTask;
-        final String imageUrl = await snapshot.ref.getDownloadURL();
-
-        await sendMessage(imageUrl: imageUrl); // Send the message with the image URL
-      }
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to upload image: $error')),
-      );
-    }
-  }
-
+ 
   Future<void> deleteMessage(String docId) async {
     try {
       await messages.doc(docId).delete();
