@@ -1,22 +1,38 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Message {
   final String message;
   final String id;
-  final String docId;
- 
+  final String docid;
+  bool isStarred; 
 
-  Message(this.message,this.id,this.docId,);
-  factory Message.fromJson(QueryDocumentSnapshot doc) {
+  Message({
+    required this.message,
+    required this.id,
+    required this.docid,
+    this.isStarred = false, 
+  });
+
+  
+  void toggleStar() {
+    isStarred = !isStarred;
+  }
+
+  
+  Map<String, dynamic> toJson() {
+    return {
+      'message': message,
+      'id': id,
+      'created at': DateTime.now(),
+      'isStarred': isStarred, 
+    };
+  }
+
+  
+  factory Message.fromJson(Map<String, dynamic> json, String docid) {
     return Message(
-      doc['message'] as String,
-      doc['id'] as String,
-      doc.id,
-      
+      message: json['message'],
+      id: json['id'],
+      docid: docid,
+      isStarred: json['isStarred'] ?? false, 
     );
   }
-  
-
-  get type => null;
-
 }
